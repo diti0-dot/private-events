@@ -1,0 +1,18 @@
+<h1><%= @event.title %></h1>
+<p><%= @event.description %></p>
+<p><strong>Date:</strong> <%= @event.date.strftime("%B %d, %Y") %></p>
+
+<h3>Attendees</h3>
+<ul>
+  <% @event.attendees.each do |attendee| %>
+    <li><%= link_to attendee.email, user_path(attendee) %></li>
+  <% end %>
+</ul>
+
+<% if user_signed_in? %>
+  <% if @event.attendees.include?(current_user) %>
+    <%= button_to "Leave Event", event_attendee_path(@event), method: :delete %>
+  <% else %>
+    <%= button_to "Attend Event", event_attendees_path(event_id: @event.id), method: :post %>
+  <% end %>
+<% end %>
